@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Vagtplan.Data;
+
 namespace Vagtplan
 {
     public class Program
@@ -12,6 +15,7 @@ namespace Vagtplan
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddDbContext<ShiftPlannerContext>(Options => { Options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")); } );
 
             var app = builder.Build();
 
