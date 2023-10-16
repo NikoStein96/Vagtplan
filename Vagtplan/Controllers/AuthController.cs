@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using Vagtplan.Data;
 using Vagtplan.Models;
 
 namespace Vagtplan.Controllers
@@ -13,18 +14,24 @@ namespace Vagtplan.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-
+        private readonly ShiftPlannerContext _context;
         public static User user = new User();
         private readonly IConfiguration _configuration;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(ShiftPlannerContext dbContext,IConfiguration configuration)
         {
+            _context = dbContext;
             _configuration = configuration;
-        
         }
 
 
-   
+        [HttpGet]
+        public IActionResult GetEmployees()
+        {
+
+            var users = _context.Users.ToList();
+            return Ok(users);
+        }
 
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserDto request) {
@@ -35,8 +42,17 @@ namespace Vagtplan.Controllers
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
-            return Ok(user);
+            var userFromDb = _context.Users.FirstOrDefault(u => u.Username == request.UserName);
 
+            if (userFromDb != null)
+            {
+                return BadRequest("User  already exists");
+            } else
+            {
+                _context.Users.Add(user);
+                _context.SaveChanges();
+                return Ok(user);
+            }
 
         }
 
@@ -44,19 +60,23 @@ namespace Vagtplan.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserDto request)
         {
-            if(user.Username != request.UserName)
+           
+            var userFromDb = _context.Users.FirstOrDefault(u => u.Username == request.UserName);
+            
+            if (userFromDb == null || userFromDb.Username != request.UserName)
             {
+                await Console.Out.WriteLineAsync("the user is" + userFromDb);
                 return BadRequest("User not found");
-
             }
 
-            if(!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
+
+            if(!VerifyPasswordHash(request.Password, userFromDb.PasswordHash, userFromDb.PasswordSalt))
             {
                 return BadRequest("Wrong password");
 
             }
 
-            string token = CreateToken(user);
+            string token = CreateToken(userFromDb);
             return Ok(token);
 
         }
