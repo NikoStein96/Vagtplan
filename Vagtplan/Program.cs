@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 using Vagtplan.Data;
 
 namespace Vagtplan
@@ -12,11 +13,13 @@ namespace Vagtplan
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<ShiftPlannerContext>(Options => { Options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")); } );
+            
+
 
             var app = builder.Build();
 
