@@ -1,7 +1,8 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
 using Vagtplan.Data;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+
 
 namespace Vagtplan
 {
@@ -9,11 +10,28 @@ namespace Vagtplan
     {
         public static void Main(string[] args)
         {
+
+
+            var credentials = GoogleCredential.FromFile("keys.json");
+            var firebaseApp = FirebaseApp.Create(new AppOptions
+            {
+                Credential = credentials,
+            });
+
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
 
             // Add services to the container.
 
-            builder.Services.AddControllers()
+            builder.Services.AddControllers();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -30,10 +48,11 @@ namespace Vagtplan
                 app.UseSwaggerUI();
             }
 
+            app.UseCors();
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            app.UseMiddleware<FirebaseAuthenticationMiddleware>();
 
             app.MapControllers();
 

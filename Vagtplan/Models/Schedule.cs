@@ -19,8 +19,8 @@ namespace Vagtplan.Models
     public class Day
     {
         public int Id { get; set; }
-        public int ScheduleId { get; set; }
         public List<Shift> Shifts { get; set;}
+        public int ScheduleId { get; set; }
 
         [JsonIgnore]
         public Schedule Schedule { get; set; } = null!;

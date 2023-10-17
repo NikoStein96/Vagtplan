@@ -17,7 +17,7 @@ namespace Vagtplan.Controllers
 
         }
 
-        [HttpGet]
+        [HttpGet()]
         public IActionResult GetEmployees() {
         
             var employees = _context.Employees.ToList();

@@ -11,8 +11,8 @@ using Vagtplan.Data;
 namespace Vagtplan.Migrations
 {
     [DbContext(typeof(ShiftPlannerContext))]
-    [Migration("20231017003822_init")]
-    partial class init
+    [Migration("20231017111626_Schedule2")]
+    partial class Schedule2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

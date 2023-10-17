@@ -34,8 +34,6 @@ namespace Vagtplan.Controllers
                 day.Schedule = schedule;
                 schedule.Days.Add(day);
 
-                
-
             }
 
             _context.Schedules.Add(schedule);
@@ -48,7 +46,7 @@ namespace Vagtplan.Controllers
         public async Task<ActionResult<List<Schedule>>> GetSchedules()
         {
 
-            var Schedules = await _context.Schedules.ToListAsync();
+            var Schedules = await _context.Schedules.Include(schedule => schedule.Days).ToListAsync();
             return Schedules;
         }
 
