@@ -15,7 +15,6 @@ public class FirebaseAuthenticationMiddleware
     public async Task Invoke(HttpContext context)
     {
         var token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-        Console.WriteLine("mytoken:" +  token);
 
         if (string.IsNullOrWhiteSpace(token))
         {

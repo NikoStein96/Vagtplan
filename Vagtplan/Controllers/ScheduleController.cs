@@ -23,15 +23,29 @@ namespace Vagtplan.Controllers
 
         [HttpPost("createSchedule")]
         public ActionResult CreateSchedule(ScheduleDto scheduleDto) {
+            DateOnly today = DateOnly.FromDateTime(DateTime.Today);
+
+            // Validation: Check if StartTime is older than today
+            if (scheduleDto.StartTime < today)
+            {
+                return BadRequest(new { error = "Start date cannot be older than today." });
+            }
+
+            // Validation: Check if StartTime is later than EndTime
+            if (scheduleDto.StartTime > scheduleDto.EndTime)
+            {
+                return BadRequest(new { error = "Start date cannot be later than end date." });
+            }
 
             Schedule schedule = new Schedule();
             schedule.StartTime = scheduleDto.StartTime;
             schedule.EndTime = scheduleDto.EndTime;
-            for (DateTime date = scheduleDto.StartTime; date <= scheduleDto.EndTime; date = date.AddDays(1))
+            for (DateOnly date = scheduleDto.StartTime; date <= scheduleDto.EndTime; date = date.AddDays(1))
             {
 
                 Day day = new Day();
                 day.Schedule = schedule;
+                day.DayDate = date;
                 schedule.Days.Add(day);
 
             }
@@ -50,9 +64,19 @@ namespace Vagtplan.Controllers
             return Schedules;
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Schedule>> GetSchedule(int id)
+        {
+            var schedule = await _context.Schedules
+                                        .Include(schedule => schedule.Days)
+                                        .FirstOrDefaultAsync(schedule => schedule.Id == id);
 
+            if (schedule == null)
+            {
+                return NotFound();
+            }
 
-
-
+            return schedule;
+        }
     }
 }

@@ -2,8 +2,8 @@
 {
     public class ScheduleDto
     {
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateOnly StartTime { get; set; }
+        public DateOnly EndTime { get; set; }
 
     }
 }

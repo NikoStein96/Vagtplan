@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vagtplan.Data;
 
@@ -10,9 +11,11 @@ using Vagtplan.Data;
 namespace Vagtplan.Migrations
 {
     [DbContext(typeof(ShiftPlannerContext))]
-    partial class ShiftPlannerContextModelSnapshot : ModelSnapshot
+    [Migration("20231023124754_daydate")]
+    partial class daydate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.12");
@@ -23,7 +26,7 @@ namespace Vagtplan.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateOnly>("DayDate")
+                    b.Property<DateTime>("DayDate")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ScheduleId")
@@ -79,10 +82,10 @@ namespace Vagtplan.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateOnly>("EndTime")
+                    b.Property<DateTime>("EndTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateOnly>("StartTime")
+                    b.Property<DateTime>("StartTime")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
