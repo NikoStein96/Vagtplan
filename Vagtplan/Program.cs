@@ -79,7 +79,7 @@ namespace Vagtplan
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-            app.UseMiddleware<FirebaseAuthenticationMiddleware>();
+            //app.UseMiddleware<FirebaseAuthenticationMiddleware>();
 
             app.MapControllers();
 
