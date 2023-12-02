@@ -1,5 +1,4 @@
 trigger:
-
 - master
 
 pool:
@@ -21,4 +20,3 @@ steps:
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'release'
-    publishLocation: 'Container'
