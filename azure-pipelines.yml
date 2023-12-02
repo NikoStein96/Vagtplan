@@ -1,4 +1,5 @@
 trigger:
+
 - master
 
 pool:
@@ -15,3 +16,9 @@ steps:
     command: 'build'
     projects: '**/*.csproj'
     arguments: '--configuration Release'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'release'
+    publishLocation: 'Container'
