@@ -7,8 +7,5 @@
         public DateTime endTime { get; set;}
         bool isFisnished { get; set;}
 
-
-
-
     }
 }

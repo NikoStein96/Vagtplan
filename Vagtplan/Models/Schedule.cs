@@ -9,7 +9,6 @@ namespace Vagtplan.Models
         public DateOnly  StartTime {  get; set; } 
         public DateOnly EndTime { get; set; }
 
-
         public ICollection<Day> Days { get; set; } = new List<Day>();
 
     }
