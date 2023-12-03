@@ -62,24 +62,23 @@ namespace Vagtplan
         }
     });
             });
-            builder.Services.AddDbContext<ShiftPlannerContext>(Options => { Options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")); } );
+            builder.Services.AddDbContext<ShiftPlannerContext>(Options => { Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")); } );
             
 
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
+
 
             app.UseCors();
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseAuthorization();
-            app.UseMiddleware<FirebaseAuthenticationMiddleware>();
+            //app.UseMiddleware<FirebaseAuthenticationMiddleware>();
 
             app.MapControllers();
 
