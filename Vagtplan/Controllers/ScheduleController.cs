@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Vagtplan.Data;
 using Vagtplan.Models;
+using Vagtplan.Models.Dto;
 
 namespace Vagtplan.Controllers
 {
@@ -21,7 +22,7 @@ namespace Vagtplan.Controllers
         }
 
 
-        [HttpPost("createSchedule")]
+        [HttpPost]
         public ActionResult CreateSchedule(ScheduleDto scheduleDto) {
             DateOnly today = DateOnly.FromDateTime(DateTime.Today);
 
@@ -60,7 +61,7 @@ namespace Vagtplan.Controllers
         public async Task<ActionResult<List<Schedule>>> GetSchedules()
         {
 
-            var Schedules = await _context.Schedules.Include(schedule => schedule.Days).ToListAsync();
+            var Schedules = await _context.Schedules.Include(schedule => schedule.Days).ThenInclude(days => days.Shifts).ToListAsync();
             return Schedules;
         }
 

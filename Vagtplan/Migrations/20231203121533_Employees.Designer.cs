@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vagtplan.Data;
 
@@ -11,9 +12,11 @@ using Vagtplan.Data;
 namespace Vagtplan.Migrations
 {
     [DbContext(typeof(ShiftPlannerContext))]
-    partial class ShiftPlannerContextModelSnapshot : ModelSnapshot
+    [Migration("20231203121533_Employees")]
+    partial class Employees
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,9 +112,12 @@ namespace Vagtplan.Migrations
                     b.Property<int>("DayId")
                         .HasColumnType("int");
 
-                    b.Property<string>("EmployeeId")
+                    b.Property<string>("EmployeeFirebaseId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
@@ -126,7 +132,7 @@ namespace Vagtplan.Migrations
 
                     b.HasIndex("DayId");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("EmployeeFirebaseId");
 
                     b.ToTable("Shifts");
                 });
@@ -152,7 +158,7 @@ namespace Vagtplan.Migrations
 
                     b.HasOne("Vagtplan.Models.Employee", "Employee")
                         .WithMany("Shifts")
-                        .HasForeignKey("EmployeeId")
+                        .HasForeignKey("EmployeeFirebaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

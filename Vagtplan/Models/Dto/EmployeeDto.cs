@@ -1,11 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-
-namespace Vagtplan.Models
+﻿namespace Vagtplan.Models.Dto
 {
-    public class Employee
+    public class CreateEmployeeDto
     {
-        [Key]
         public string FirebaseId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
@@ -14,6 +10,5 @@ namespace Vagtplan.Models
         public string JobTitle { get; set; }
         public int Age { get; set; }
         public int Pay { get; set; }
-        public List<Shift> Shifts { get; set; } = new List<Shift>();
     }
 }

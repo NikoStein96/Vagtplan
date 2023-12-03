@@ -1,4 +1,4 @@
-﻿namespace Vagtplan.Models
+﻿namespace Vagtplan.Models.Dto
 {
     public class ScheduleDto
     {

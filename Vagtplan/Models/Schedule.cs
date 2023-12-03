@@ -46,7 +46,7 @@ namespace Vagtplan.Models
             set => DayDateDb = value.ToDateTime(new TimeOnly());
         }
 
-        public List<Shift> Shifts { get; set; }
+        public List<Shift> Shifts { get; set; } = new List<Shift>();
         public int ScheduleId { get; set; }
 
         [JsonIgnore]
