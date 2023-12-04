@@ -64,7 +64,7 @@ namespace Vagtplan.Controllers
             newOwner.FirebaseId = UserId;
             newOwner.Name = owner.Name;
             newOwner.Email = owner.Email;
-            newOwner.Role = owner.Role;
+            newOwner.Role = UserRole.Owner;
 
             Organisation org = new Organisation();
             org.Name = owner.OrganisationName;
