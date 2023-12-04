@@ -3,6 +3,7 @@ using Vagtplan.Data;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.OpenApi.Models;
+using OfficeOpenXml;
 
 namespace Vagtplan
 {
@@ -17,6 +18,8 @@ namespace Vagtplan
             {
                 Credential = credentials,
             });
+
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             var builder = WebApplication.CreateBuilder(args);
 

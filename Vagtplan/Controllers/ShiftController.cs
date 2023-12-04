@@ -34,7 +34,8 @@ namespace Vagtplan.Controllers
             newShift.DayId = shift.DayId;
             newShift.EmployeeId = shift.EmployeeId;
             newShift.Employee = _context.Employees.Where(e => e.FirebaseId == shift.EmployeeId).SingleOrDefault();
-            newShift.Day = _context.Days.Where(d => d.Id == shift.DayId).SingleOrDefault();
+            Console.WriteLine(newShift.Employee.Name);
+            newShift.Day =  _context.Days.Where(d => d.Id == shift.DayId).SingleOrDefault();
             newShift.Day.Shifts.Add(newShift);
             newShift.Employee.Shifts.Add(newShift);
 
