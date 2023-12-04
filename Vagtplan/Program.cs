@@ -4,7 +4,6 @@ using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.OpenApi.Models;
 using OfficeOpenXml;
-using Vagtplan.Services;
 
 namespace Vagtplan
 {
