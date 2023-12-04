@@ -28,7 +28,7 @@ public class FirebaseAuthenticationMiddleware
             // The token is valid, and you can access the decoded claims (e.g., decodedToken.Claims).
             // You can also attach the decoded token to the HttpContext for further processing.
 
-            context.Items["FirebaseToken"] = decodedToken;
+            context.Items["FirebaseUserId"] = decodedToken.Uid;
 
             await _next(context);
         }

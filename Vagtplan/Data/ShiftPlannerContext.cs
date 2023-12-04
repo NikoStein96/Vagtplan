@@ -10,6 +10,8 @@ namespace Vagtplan.Data
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<Employee> Employees { get; set; }
 
+        public DbSet<Organisation> Organisations { get; set; }
+
         public DbSet<Schedule> Schedules { get; set; }
 
         public DbSet<Day> Days { get; set; }

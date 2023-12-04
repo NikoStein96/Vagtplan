@@ -4,6 +4,7 @@ using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.OpenApi.Models;
 using OfficeOpenXml;
+using Vagtplan.Services;
 
 namespace Vagtplan
 {
@@ -81,7 +82,7 @@ namespace Vagtplan
             //app.UseHttpsRedirection();
 
             app.UseAuthorization();
-            //app.UseMiddleware<FirebaseAuthenticationMiddleware>();
+            app.UseMiddleware<FirebaseAuthenticationMiddleware>();
 
             app.MapControllers();
 

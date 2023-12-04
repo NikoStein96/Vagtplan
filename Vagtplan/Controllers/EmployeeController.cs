@@ -24,26 +24,58 @@ namespace Vagtplan.Controllers
         public async Task<ActionResult<List<Employee>>> GetEmployees()
         {
 
-            var employees = await _context.Employees.Include(employee => employee.Shifts).ToListAsync();
+            var employees = await _context.Employees.Include(employee => employee.Shifts).Include(employee => employee.Organisation).ToListAsync();
             return Ok(employees);
         }
 
-        [HttpPost]
+        [HttpPost("Employees")]
         public IActionResult PostEmployees(CreateEmployeeDto employee) {
 
+            var UserId = HttpContext.Items["FirebaseUserId"] as string;
+
+            if (UserId == null)
+            {
+                return Unauthorized();
+            }
+
             Employee newEmployee = new Employee();
-            newEmployee.FirebaseId = employee.FirebaseId;
+            newEmployee.FirebaseId = UserId;
             newEmployee.Name = employee.Name;
             newEmployee.Email = employee.Email;
-            newEmployee.Phone = employee.Phone;
-            newEmployee.City = employee.City;
-            newEmployee.JobTitle = employee.JobTitle;
-            newEmployee.Age = employee.Age;
-            newEmployee.Pay = employee.Pay;
+
             
             _context.Employees.Add(newEmployee);
             _context.SaveChanges();
             return Ok(employee);
+        }
+
+
+        [HttpPost("Owners")]
+        public IActionResult CreateOwner(CreateOwnerDto owner)
+        {
+            var UserId = HttpContext.Items["FirebaseUserId"] as string;
+
+            if (UserId == null)
+            {
+                return Unauthorized();
+            }
+
+            Employee newOwner = new Employee();
+            newOwner.FirebaseId = UserId;
+            newOwner.Name = owner.Name;
+            newOwner.Email = owner.Email;
+            newOwner.Role = owner.Role;
+
+            Organisation org = new Organisation();
+            org.Name = owner.OrganisationName;
+            org.Owner = newOwner;
+
+            newOwner.Organisation = org;
+
+            _context.Employees.Add(newOwner);
+            _context.Organisations.Add(org);
+            _context.SaveChanges();
+            return Ok(owner);
         }
     }
 }
