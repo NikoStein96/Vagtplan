@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FirebaseAdmin.Auth;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Vagtplan.Data;
@@ -29,7 +30,7 @@ namespace Vagtplan.Controllers
         }
 
         [HttpPost("Employees")]
-        public IActionResult PostEmployees(CreateEmployeeDto employee) {
+        public async Task<IActionResult> PostEmployeesAsync(CreateEmployeeDto employee) {
 
             var UserId = HttpContext.Items["FirebaseUserId"] as string;
 
@@ -37,12 +38,23 @@ namespace Vagtplan.Controllers
             {
                 return Unauthorized();
             }
+            UserRecordArgs urg = new UserRecordArgs();
+            urg.Email = employee.Email;
+            urg.Password = "simonertyk";
 
+            var userRecord = await FirebaseAuth.DefaultInstance.CreateUserAsync(urg);
             Employee newEmployee = new Employee();
-            newEmployee.FirebaseId = UserId;
             newEmployee.Name = employee.Name;
             newEmployee.Email = employee.Email;
+            newEmployee.FirebaseId = userRecord.Uid;
+            newEmployee.Organisation = _context.Organisations.Where(organisation => organisation.Owner.FirebaseId == UserId).First();
 
+
+            /* 
+             
+             
+             
+            */
             
             _context.Employees.Add(newEmployee);
             _context.SaveChanges();
