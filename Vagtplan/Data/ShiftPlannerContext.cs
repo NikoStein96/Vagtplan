@@ -16,5 +16,13 @@ namespace Vagtplan.Data
 
         public DbSet<Day> Days { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Organisation>()
+                .HasMany(o => o.Employees)
+                .WithOne(e => e.Organisation)
+                .HasForeignKey(e => e.OrganisationId);
+        }
+
     }
 }

@@ -48,6 +48,7 @@ namespace Vagtplan.Controllers
             newEmployee.Email = employee.Email;
             newEmployee.FirebaseId = userRecord.Uid;
             newEmployee.Organisation = _context.Organisations.Where(organisation => organisation.Owner.FirebaseId == UserId).First();
+            newEmployee.Organisation.Employees.Add(newEmployee);
 
             _context.Employees.Add(newEmployee);
             _context.SaveChanges();
