@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Vagtplan.Data;
 using Vagtplan.Models;
-using Vagtplan.Models.Dto;
 using Microsoft.Office.Interop.Excel;
 using System.Drawing.Text;
 using OfficeOpenXml;
 using Vagtplan.Migrations;
+using Vagtplan.Dto;
+using Vagtplan.Models.Dto;
 
 namespace Vagtplan.Controllers
 {

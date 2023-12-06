@@ -9,9 +9,5 @@ namespace Vagtplan.Models
         public string Name { get; set; }
 
         public List<Employee> Employees { get; set; } = new List<Employee>();
-
-
-        [JsonIgnore]
-        public Employee? Owner { get; set; }
     }
 }

@@ -4,6 +4,16 @@ using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.OpenApi.Models;
 using OfficeOpenXml;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using Vagtplan.Interfaces.Repositories;
+using Vagtplan.Repositories;
+using Microsoft.Office.Interop.Excel;
+using Vagtplan.Interfaces;
+using Vagtplan.UOF;
+using Vagtplan.Interfaces.Services;
+using Vagtplan.Services;
 
 namespace Vagtplan
 {
@@ -31,9 +41,9 @@ namespace Vagtplan
                 });
             });
 
-            // Add services to the container.
+            builder.Services.AddControllers(); 
 
-            builder.Services.AddControllers();
+
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -66,7 +76,10 @@ namespace Vagtplan
     });
             });
             builder.Services.AddDbContext<ShiftPlannerContext>(Options => { Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")); } );
-            
+            builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 
 
             var app = builder.Build();
