@@ -23,6 +23,10 @@ namespace Vagtplan.Services
             return _unitOfWork.Employees.GetEmployees();
         }
 
+        public Employee GetEmployee(string employeeId) {
+            return _unitOfWork.Employees.GetEmployee(employeeId);
+        }
+
         public async Task<bool> CreateEmployee(CreateEmployeeDto employee)
         {
             UserRecordArgs urg = new UserRecordArgs();
@@ -65,30 +69,5 @@ namespace Vagtplan.Services
             return true;
         }
 
-        public bool SetPreferedWorkDays(string firebaseId, List<Weekday> weekdays)
-        {
-            var employee = _unitOfWork.Employees.GetEmployeeWithOrganisation(firebaseId);
-
-            if (employee == null)
-            {
-                throw new InvalidOperationException("Employee not found.");
-            }
-
-            employee.PreferedWorkDays.Clear();
-
-            foreach (var weekday in weekdays)
-            {
-                employee.PreferedWorkDays.Add(new PreferedWorkDay
-                {
-                    EmployeeId = employee.FirebaseId,
-                    Weekday = weekday
-                });
-            }
-
-            _unitOfWork.Employees.SetPreferedWorkDays(firebaseId,employee.PreferedWorkDays);
-            _unitOfWork.Complete();
-
-            return true;
-        }
     }
 }

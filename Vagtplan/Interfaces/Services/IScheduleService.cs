@@ -11,6 +11,8 @@ namespace Vagtplan.Interfaces.Services
 
         Task<Schedule> GetSchedule(int id);
 
+        void UpdateAvailableEmployees(UpdateAvailableDaysDto UpdateDays);
+
         void ExportSchedule(int id);
 
     }

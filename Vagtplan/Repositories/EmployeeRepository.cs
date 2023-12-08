@@ -24,9 +24,9 @@ namespace Vagtplan.Repositories
                 .FirstOrDefault(e => e.FirebaseId == firebaseId);
         }
 
-        public void SetPreferedWorkDays(string firebaseId, List<PreferedWorkDay> workDays)
-        {
-            _context.Employees.Where(e => e.FirebaseId == firebaseId).First().PreferedWorkDays = workDays;
-        }
+        public Employee GetEmployee(string firebaseId) {
+            return _context.Employees.FirstOrDefault(e => e.FirebaseId == firebaseId);       
+        } 
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Google.Api.Gax;
+using Microsoft.EntityFrameworkCore;
 using Vagtplan.Interfaces;
 using Vagtplan.Interfaces.Services;
 using Vagtplan.Models;
@@ -47,6 +48,36 @@ namespace Vagtplan.Services
         public void ExportSchedule(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public async void UpdateAvailableEmployees(UpdateAvailableDaysDto UpdateDays) {
+            try
+            {
+                var schedule = await _unitOfWork.Schedules.GetSchedule(UpdateDays.ScheduleId);
+                var employee = _unitOfWork.Employees.GetEmployee(UpdateDays.FirebaseId);
+                if (schedule == null)
+                {
+                    throw new Exception("Not Found");
+                }
+
+                foreach (Day day in schedule.Days)
+                {
+                    if (UpdateDays.Days != null)
+                    {
+                        if (UpdateDays.Days.Contains(day.DayDate))
+                        {
+                            day.AvailableEmployees.Add(employee);
+                        }
+                    }
+                }
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+           
+            
+          
+            _unitOfWork.Complete();
         }
     }
 }

@@ -16,6 +16,13 @@ namespace Vagtplan.Models.Dto
         public OrganisationDTO Organisation { get; set; }
     }
 
+    public class UpdateAvailableDaysDto {
+        public List<DateOnly> Days { get; set; }
+        public string FirebaseId { get; set; }
+        public int ScheduleId { get; set; }
+    
+    }
+
     public class CreateEmployeeDto
     {
         public string? FirebaseId { get; set; } 

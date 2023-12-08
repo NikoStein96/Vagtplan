@@ -49,6 +49,8 @@ namespace Vagtplan.Models
         public List<Shift> Shifts { get; set; } = new List<Shift>();
         public int ScheduleId { get; set; }
 
+        public List<Employee> AvailableEmployees { get; set; } = new List<Employee>();
+
         [JsonIgnore]
         public Schedule Schedule { get; set; } = null!;
     }

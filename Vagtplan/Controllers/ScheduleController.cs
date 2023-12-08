@@ -9,6 +9,7 @@ using OfficeOpenXml;
 using Vagtplan.Dto;
 using Vagtplan.Models.Dto;
 using Vagtplan.Interfaces.Services;
+using System.Runtime.InteropServices;
 
 namespace Vagtplan.Controllers
 {
@@ -30,13 +31,20 @@ namespace Vagtplan.Controllers
     {
 
         private readonly IScheduleService _scheduleService;
+        private readonly IEmployeeService _employeeService;
 
-        public ScheduleController(IScheduleService scheduleService)
+
+        public ScheduleController(IScheduleService scheduleService, IEmployeeService employeeService)
         {
 
             _scheduleService = scheduleService;
-
+            _employeeService = employeeService;
         }
+
+      
+        
+
+         
 
 
         [HttpPost]
@@ -65,6 +73,38 @@ namespace Vagtplan.Controllers
 
             return await _scheduleService.GetSchedules();
         }
+
+
+
+        [HttpPut("UpdateAvailableEmployees")]
+        public bool UpdateAvailableEmployees(UpdateAvailableDaysDto UpdateDays) {
+
+            _scheduleService.UpdateAvailableEmployees(UpdateDays);
+            return true;
+
+        }
+
+        [HttpPut("UpdateShiftDraft")]
+        public async Task<ActionResult<Schedule>> GenerateShiftDraft(int scheduleid)
+        {
+            var schedule = await _scheduleService.GetSchedule(scheduleid);
+
+            foreach (Day day in schedule.Days) {
+                foreach (Shift shift in day.Shifts)
+                {
+                    shift.Employee = GetEmployeeWithLeastWorkload(day.AvailableEmployees);
+                    day.AvailableEmployees.Remove(shift.Employee);
+
+                }         
+            }
+            return schedule;
+        }
+
+        static Employee GetEmployeeWithLeastWorkload(List<Employee> employees)
+        {
+            return employees.OrderBy(e => e.Shifts.Count).FirstOrDefault();
+        }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Schedule>> GetSchedule(int id)

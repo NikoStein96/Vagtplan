@@ -10,26 +10,6 @@ namespace Vagtplan.Models
         Employee
     }
 
-    public enum Weekday
-    {
-        Monday,
-        Tuesday,
-        Wednesday,
-        Thursday,
-        Friday,
-        Saturday,
-        Sunday
-    }
-
-    public class PreferedWorkDay
-    {
-        public string EmployeeId { get; set; }
-
-        [JsonIgnore]
-        public Employee Employee { get; set; }
-        public Weekday Weekday { get; set; }
-    }
-
 
     public class Employee
     {
@@ -43,7 +23,7 @@ namespace Vagtplan.Models
         public int Age { get; set; }
         public int Pay { get; set; }
         public UserRole Role { get; set; } = UserRole.Employee;
-        public List<PreferedWorkDay> PreferedWorkDays { get; set; } = new List<PreferedWorkDay>();
+        public List<Day> PreferedWorkDays { get; set; } = new List<Day>();
         public int OrganisationId { get; set; }
         public Organisation Organisation { get; set; } = null!;
         public List<Shift> Shifts { get; set; } = new List<Shift>();

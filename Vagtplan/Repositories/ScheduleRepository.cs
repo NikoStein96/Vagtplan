@@ -20,7 +20,9 @@ namespace Vagtplan.Repositories
         public async Task<Schedule> GetSchedule(int id)
         {
             return await _context.Schedules
-                                        .Include(schedule => schedule.Days).ThenInclude(day => day.Shifts).ThenInclude(shift => shift.Employee)
+                                        .Include(schedule => schedule.Days).ThenInclude(day => day.Shifts)
+                                        .ThenInclude(shift => shift.Employee)
+                                        .Include(schedule => schedule.Days).ThenInclude(availableEmployees => availableEmployees.AvailableEmployees)
                                         .FirstOrDefaultAsync(schedule => schedule.Id == id);
         }
     }

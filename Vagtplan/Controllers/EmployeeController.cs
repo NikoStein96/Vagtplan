@@ -44,12 +44,6 @@ namespace Vagtplan.Controllers
             return Ok();
         }
 
-
-        [HttpPut]
-        public bool UpdateEmployeeWorkDays(PreferedDaysDto prefered)
-        {
-            _employeeService.SetPreferedWorkDays(prefered.FirebaseId, prefered.Weekdays);
-            return true;
-        }
+      
     }
 }
