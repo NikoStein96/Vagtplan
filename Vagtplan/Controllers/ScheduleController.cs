@@ -6,9 +6,9 @@ using Vagtplan.Models;
 using Microsoft.Office.Interop.Excel;
 using System.Drawing.Text;
 using OfficeOpenXml;
-using Vagtplan.Migrations;
 using Vagtplan.Dto;
 using Vagtplan.Models.Dto;
+using Vagtplan.Interfaces.Services;
 
 namespace Vagtplan.Controllers
 {
@@ -29,18 +29,18 @@ namespace Vagtplan.Controllers
     public class ScheduleController : ControllerBase
     {
 
-        private readonly ShiftPlannerContext _context;
+        private readonly IScheduleService _scheduleService;
 
-        public ScheduleController(ShiftPlannerContext dbContext)
+        public ScheduleController(IScheduleService scheduleService)
         {
 
-            _context = dbContext;
+            _scheduleService = scheduleService;
 
         }
 
 
         [HttpPost]
-        public ActionResult CreateSchedule(ScheduleDto scheduleDto)
+        public ActionResult CreateSchedule(CreateScheduleDto scheduleDto)
         {
             DateOnly today = DateOnly.FromDateTime(DateTime.Today);
 
@@ -56,39 +56,20 @@ namespace Vagtplan.Controllers
                 return BadRequest(new { error = "Start date cannot be later than end date." });
             }
 
-            Schedule schedule = new Schedule();
-            schedule.StartTime = scheduleDto.StartTime;
-            schedule.EndTime = scheduleDto.EndTime;
-            for (DateOnly date = scheduleDto.StartTime; date <= scheduleDto.EndTime; date = date.AddDays(1))
-            {
-
-                Day day = new Day();
-                day.Schedule = schedule;
-                day.DayDate = date;
-                schedule.Days.Add(day);
-
-            }
-
-            _context.Schedules.Add(schedule);
-            _context.SaveChanges();
-
-            return Ok(schedule);
+            return Ok(_scheduleService.CreateSchedule(scheduleDto));
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Schedule>>> GetSchedules()
+        public async Task<List<Schedule>> GetSchedules()
         {
 
-            var Schedules = await _context.Schedules.Include(schedule => schedule.Days).ThenInclude(days => days.Shifts).ToListAsync();
-            return Schedules;
+            return await _scheduleService.GetSchedules();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Schedule>> GetSchedule(int id)
         {
-            var schedule = await _context.Schedules
-                                        .Include(schedule => schedule.Days)
-                                        .FirstOrDefaultAsync(schedule => schedule.Id == id);
+            var schedule = await _scheduleService.GetSchedule(id);
 
             if (schedule == null)
             {
@@ -102,9 +83,7 @@ namespace Vagtplan.Controllers
         [HttpGet("ExportSchedule/{id}")]
         public async Task<ActionResult<Schedule>> ExportSchedule(int id)
         {
-            var schedule = await _context.Schedules
-                                        .Include(schedule => schedule.Days).ThenInclude(day => day.Shifts).ThenInclude(shift => shift.Employee)
-                                        .FirstOrDefaultAsync(schedule => schedule.Id == id);
+            var schedule = await _scheduleService.GetSchedule(id);
 
 
             if (schedule == null) { return NotFound(); }
@@ -113,14 +92,6 @@ namespace Vagtplan.Controllers
             var file = new FileInfo($@"C:\excelsheets\{id}.xlsx");
 
             await SaveExcelFile(schedule.Days.Cast<Day>().ToList(), file);
-
-
-
-
-
-
-
-
 
 
             return schedule;

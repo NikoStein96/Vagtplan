@@ -76,11 +76,19 @@ namespace Vagtplan
     });
             });
             builder.Services.AddDbContext<ShiftPlannerContext>(Options => { Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")); } );
+
             builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
-            builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddTransient<IEmployeeService, EmployeeService>();
+            builder.Services.AddTransient<IScheduleRepository, ScheduleRepository>();
+            builder.Services.AddTransient<IShiftRepository, ShiftRepository>();
+            builder.Services.AddTransient<IDayRepository, DayRepository>();
 
+            builder.Services.AddTransient<IEmployeeService, EmployeeService>();
+            builder.Services.AddTransient<IShiftService, ShiftService>();
+            builder.Services.AddTransient<IScheduleService, ScheduleService>();
+            builder.Services.AddTransient<IDayService, DayService>();
+
+            builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             var app = builder.Build();
 
@@ -94,7 +102,7 @@ namespace Vagtplan
             //app.UseHttpsRedirection();
 
             app.UseAuthorization();
-            app.UseMiddleware<FirebaseAuthenticationMiddleware>();
+            // app.UseMiddleware<FirebaseAuthenticationMiddleware>();
 
             app.MapControllers();
 

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Vagtplan.Interfaces;
 using Vagtplan.Interfaces.Repositories;
 using Vagtplan.Interfaces.Services;
-using Vagtplan.Migrations;
+
 using Vagtplan.Models;
 using Vagtplan.Models.Dto;
 
@@ -20,7 +20,7 @@ namespace Vagtplan.Services
 
         public List<Employee> GetEmployees()
         {
-            return _unitOfWork.Employees.GetAll().ToList();
+            return _unitOfWork.Employees.GetEmployees();
         }
 
         public async Task<bool> CreateEmployee(CreateEmployeeDto employee)
@@ -62,6 +62,32 @@ namespace Vagtplan.Services
             _unitOfWork.Employees.Add(newOwner);
             _unitOfWork.Complete();
 ;
+            return true;
+        }
+
+        public bool SetPreferedWorkDays(string firebaseId, List<Weekday> weekdays)
+        {
+            var employee = _unitOfWork.Employees.GetEmployeeWithOrganisation(firebaseId);
+
+            if (employee == null)
+            {
+                throw new InvalidOperationException("Employee not found.");
+            }
+
+            employee.PreferedWorkDays.Clear();
+
+            foreach (var weekday in weekdays)
+            {
+                employee.PreferedWorkDays.Add(new PreferedWorkDay
+                {
+                    EmployeeId = employee.FirebaseId,
+                    Weekday = weekday
+                });
+            }
+
+            _unitOfWork.Employees.SetPreferedWorkDays(firebaseId,employee.PreferedWorkDays);
+            _unitOfWork.Complete();
+
             return true;
         }
     }

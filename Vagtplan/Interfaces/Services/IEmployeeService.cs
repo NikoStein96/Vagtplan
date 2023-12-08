@@ -8,5 +8,7 @@ namespace Vagtplan.Interfaces.Services
         List<Employee> GetEmployees();
         Task<bool> CreateEmployee(CreateEmployeeDto employee);
         bool CreateOwner(CreateOwnerDto employee);
+
+        bool SetPreferedWorkDays(string firebaseId, List<Weekday> weekdays);
     }
 }

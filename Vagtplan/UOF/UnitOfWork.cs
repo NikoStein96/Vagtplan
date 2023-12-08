@@ -13,8 +13,15 @@ namespace Vagtplan.UOF
         {
             _context = context;
             Employees = new EmployeeRepository(_context);
+            Schedules = new ScheduleRepository(_context);
+            Shifts = new ShiftRepository(_context);
+            Days = new DayRepository(_context);
         }
         public IEmployeeRepository Employees { get; private set; }
+        public IScheduleRepository Schedules { get; private set; }
+        public IShiftRepository Shifts { get; private set; }
+
+        public IDayRepository Days { get; private set; }
         public int Complete()
         {
             return _context.SaveChanges();

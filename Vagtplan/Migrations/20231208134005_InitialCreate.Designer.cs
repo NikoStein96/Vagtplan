@@ -12,8 +12,8 @@ using Vagtplan.Data;
 namespace Vagtplan.Migrations
 {
     [DbContext(typeof(ShiftPlannerContext))]
-    [Migration("20231203121533_Employees")]
-    partial class Employees
+    [Migration("20231208134005_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,31 +55,64 @@ namespace Vagtplan.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("JobTitle")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrganisationId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Pay")
                         .HasColumnType("int");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.HasKey("FirebaseId");
 
+                    b.HasIndex("OrganisationId");
+
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("Vagtplan.Models.Organisation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Organisations");
+                });
+
+            modelBuilder.Entity("Vagtplan.Models.PreferedWorkDay", b =>
+                {
+                    b.Property<string>("EmployeeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Weekday")
+                        .HasColumnType("int");
+
+                    b.HasKey("EmployeeId", "Weekday");
+
+                    b.ToTable("PreferedWorkDays");
                 });
 
             modelBuilder.Entity("Vagtplan.Models.Schedule", b =>
@@ -112,12 +145,9 @@ namespace Vagtplan.Migrations
                     b.Property<int>("DayId")
                         .HasColumnType("int");
 
-                    b.Property<string>("EmployeeFirebaseId")
+                    b.Property<string>("EmployeeId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
@@ -132,7 +162,7 @@ namespace Vagtplan.Migrations
 
                     b.HasIndex("DayId");
 
-                    b.HasIndex("EmployeeFirebaseId");
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Shifts");
                 });
@@ -148,6 +178,28 @@ namespace Vagtplan.Migrations
                     b.Navigation("Schedule");
                 });
 
+            modelBuilder.Entity("Vagtplan.Models.Employee", b =>
+                {
+                    b.HasOne("Vagtplan.Models.Organisation", "Organisation")
+                        .WithMany("Employees")
+                        .HasForeignKey("OrganisationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Organisation");
+                });
+
+            modelBuilder.Entity("Vagtplan.Models.PreferedWorkDay", b =>
+                {
+                    b.HasOne("Vagtplan.Models.Employee", "Employee")
+                        .WithMany("PreferedWorkDays")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("Vagtplan.Models.Shift", b =>
                 {
                     b.HasOne("Vagtplan.Models.Day", "Day")
@@ -158,7 +210,7 @@ namespace Vagtplan.Migrations
 
                     b.HasOne("Vagtplan.Models.Employee", "Employee")
                         .WithMany("Shifts")
-                        .HasForeignKey("EmployeeFirebaseId")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -174,7 +226,14 @@ namespace Vagtplan.Migrations
 
             modelBuilder.Entity("Vagtplan.Models.Employee", b =>
                 {
+                    b.Navigation("PreferedWorkDays");
+
                     b.Navigation("Shifts");
+                });
+
+            modelBuilder.Entity("Vagtplan.Models.Organisation", b =>
+                {
+                    b.Navigation("Employees");
                 });
 
             modelBuilder.Entity("Vagtplan.Models.Schedule", b =>

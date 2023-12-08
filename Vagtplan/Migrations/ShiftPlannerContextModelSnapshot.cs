@@ -99,6 +99,19 @@ namespace Vagtplan.Migrations
                     b.ToTable("Organisations");
                 });
 
+            modelBuilder.Entity("Vagtplan.Models.PreferedWorkDay", b =>
+                {
+                    b.Property<string>("EmployeeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Weekday")
+                        .HasColumnType("int");
+
+                    b.HasKey("EmployeeId", "Weekday");
+
+                    b.ToTable("PreferedWorkDays");
+                });
+
             modelBuilder.Entity("Vagtplan.Models.Schedule", b =>
                 {
                     b.Property<int>("Id")
@@ -173,6 +186,17 @@ namespace Vagtplan.Migrations
                     b.Navigation("Organisation");
                 });
 
+            modelBuilder.Entity("Vagtplan.Models.PreferedWorkDay", b =>
+                {
+                    b.HasOne("Vagtplan.Models.Employee", "Employee")
+                        .WithMany("PreferedWorkDays")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("Vagtplan.Models.Shift", b =>
                 {
                     b.HasOne("Vagtplan.Models.Day", "Day")
@@ -199,6 +223,8 @@ namespace Vagtplan.Migrations
 
             modelBuilder.Entity("Vagtplan.Models.Employee", b =>
                 {
+                    b.Navigation("PreferedWorkDays");
+
                     b.Navigation("Shifts");
                 });
 

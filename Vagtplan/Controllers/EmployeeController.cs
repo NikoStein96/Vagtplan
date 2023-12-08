@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Vagtplan.Dto;
 using Vagtplan.Interfaces.Services;
 using Vagtplan.Models;
 using Vagtplan.Models.Dto;
@@ -29,10 +30,6 @@ namespace Vagtplan.Controllers
         [HttpPost("Employees")]
         public async Task<IActionResult> PostEmployeesAsync(CreateEmployeeDto employee) {
 
-            var UserId = HttpContext.Items["FirebaseUserId"] as string;
-
-            employee.FirebaseId = UserId;
-
             await _employeeService.CreateEmployee(employee);
             
             return Ok();
@@ -42,13 +39,17 @@ namespace Vagtplan.Controllers
         [HttpPost("Owners")]
         public IActionResult CreateOwner(CreateOwnerDto owner)
         {
-            var UserId = HttpContext.Items["FirebaseUserId"] as string;
-
-            owner.FirebaseId = UserId;
-
             _employeeService.CreateOwner(owner);
             
             return Ok();
+        }
+
+
+        [HttpPut]
+        public bool UpdateEmployeeWorkDays(PreferedDaysDto prefered)
+        {
+            _employeeService.SetPreferedWorkDays(prefered.FirebaseId, prefered.Weekdays);
+            return true;
         }
     }
 }
