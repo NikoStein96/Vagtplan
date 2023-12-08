@@ -9,7 +9,7 @@ namespace Vagtplan.Interfaces.Services
 
         Task<List<Schedule>> GetSchedules();
 
-        Task<Schedule> GetSchedule(int id);
+        Schedule GetSchedule(int id);
 
         void UpdateAvailableEmployees(UpdateAvailableDaysDto UpdateDays);
 

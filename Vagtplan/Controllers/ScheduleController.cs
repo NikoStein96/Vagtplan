@@ -87,7 +87,7 @@ namespace Vagtplan.Controllers
         [HttpPut("UpdateShiftDraft")]
         public async Task<ActionResult<Schedule>> GenerateShiftDraft(int scheduleid)
         {
-            var schedule = await _scheduleService.GetSchedule(scheduleid);
+            var schedule =  _scheduleService.GetSchedule(scheduleid);
 
             foreach (Day day in schedule.Days) {
                 foreach (Shift shift in day.Shifts)
@@ -109,7 +109,7 @@ namespace Vagtplan.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Schedule>> GetSchedule(int id)
         {
-            var schedule = await _scheduleService.GetSchedule(id);
+            var schedule = _scheduleService.GetSchedule(id);
 
             if (schedule == null)
             {
@@ -123,7 +123,7 @@ namespace Vagtplan.Controllers
         [HttpGet("ExportSchedule/{id}")]
         public async Task<ActionResult<Schedule>> ExportSchedule(int id)
         {
-            var schedule = await _scheduleService.GetSchedule(id);
+            var schedule = _scheduleService.GetSchedule(id);
 
 
             if (schedule == null) { return NotFound(); }

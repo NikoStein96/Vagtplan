@@ -6,6 +6,6 @@ namespace Vagtplan.Interfaces.Repositories
     {
         Task<List<Schedule>> GetSchedules();
 
-        Task<Schedule> GetSchedule(int id);
+        Schedule GetSchedule(int id);
     }
 }

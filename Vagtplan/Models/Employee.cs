@@ -23,9 +23,13 @@ namespace Vagtplan.Models
         public int Age { get; set; }
         public int Pay { get; set; }
         public UserRole Role { get; set; } = UserRole.Employee;
+
+        [JsonIgnore]
         public List<Day> PreferedWorkDays { get; set; } = new List<Day>();
         public int OrganisationId { get; set; }
+        [JsonIgnore]
         public Organisation Organisation { get; set; } = null!;
+        [JsonIgnore]
         public List<Shift> Shifts { get; set; } = new List<Shift>();
 
     }

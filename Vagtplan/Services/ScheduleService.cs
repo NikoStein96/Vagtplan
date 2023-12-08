@@ -35,7 +35,7 @@ namespace Vagtplan.Services
         }
 
 
-        public Task<Schedule> GetSchedule(int id)
+        public Schedule GetSchedule(int id)
         {
             return _unitOfWork.Schedules.GetSchedule(id);
         }
@@ -51,9 +51,8 @@ namespace Vagtplan.Services
         }
 
         public async void UpdateAvailableEmployees(UpdateAvailableDaysDto UpdateDays) {
-            try
-            {
-                var schedule = await _unitOfWork.Schedules.GetSchedule(UpdateDays.ScheduleId);
+
+                var schedule = _unitOfWork.Schedules.GetSchedule(UpdateDays.ScheduleId);
                 var employee = _unitOfWork.Employees.GetEmployee(UpdateDays.FirebaseId);
                 if (schedule == null)
                 {
@@ -70,13 +69,6 @@ namespace Vagtplan.Services
                         }
                     }
                 }
-            } catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-           
-            
-          
             _unitOfWork.Complete();
         }
     }
