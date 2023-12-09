@@ -61,13 +61,10 @@ namespace Vagtplan.Services
 
                 foreach (Day day in schedule.Days)
                 {
-                    if (UpdateDays.Days != null)
-                    {
-                        if (UpdateDays.Days.Contains(day.DayDate))
+                        if (UpdateDays.Day == day.DayDate)
                         {
                             day.AvailableEmployees.Add(employee);
                         }
-                    }
                 }
             _unitOfWork.Complete();
         }

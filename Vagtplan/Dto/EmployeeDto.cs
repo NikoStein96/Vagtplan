@@ -17,7 +17,7 @@ namespace Vagtplan.Models.Dto
     }
 
     public class UpdateAvailableDaysDto {
-        public List<DateOnly> Days { get; set; }
+        public DateOnly Day { get; set; }
         public string FirebaseId { get; set; }
         public int ScheduleId { get; set; }
     
