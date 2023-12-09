@@ -7,7 +7,7 @@ namespace Vagtplan.Interfaces.Services
     {
         bool CreateSchedule(CreateScheduleDto schedule);
 
-        Task<List<Schedule>> GetSchedules();
+        List<Schedule> GetSchedules(string id);
 
         Schedule GetSchedule(int id);
 

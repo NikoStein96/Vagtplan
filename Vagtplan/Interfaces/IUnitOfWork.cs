@@ -8,6 +8,8 @@ namespace Vagtplan.Interfaces
         IScheduleRepository Schedules { get; }
         IShiftRepository Shifts { get; }
 
+        IOrganisationRepository Organisations { get; }
+
         IDayRepository Days { get; }
         int Complete();
     }

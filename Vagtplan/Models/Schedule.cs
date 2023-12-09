@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace Vagtplan.Models
@@ -27,6 +28,11 @@ namespace Vagtplan.Models
         }
 
         public ICollection<Day> Days { get; set; } = new List<Day>();
+
+        public int OrganisationId { get; set; }
+
+        [DeleteBehavior(DeleteBehavior.Restrict)]
+        public Organisation Organisation { get; set; } = null!;
     }
 
 

@@ -12,5 +12,7 @@
         public DateOnly StartTime { get; set; }
         public DateOnly EndTime { get; set; }
 
+        public int OrgId { get; set; }
+
     }
 }

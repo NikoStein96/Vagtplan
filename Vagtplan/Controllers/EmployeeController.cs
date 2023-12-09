@@ -19,6 +19,14 @@ namespace Vagtplan.Controllers
             _employeeService = employeeService;
         }
 
+        [HttpGet("EmployeeProfile")]
+        public Employee GetEmployeeProfile(int id)
+        {
+            var UserId = HttpContext.Items["FirebaseUserId"] as string;
+
+            return _employeeService.GetEmployee(UserId);
+        }
+
 
         [HttpGet]
         public  ActionResult<List<Employee>> GetEmployees()

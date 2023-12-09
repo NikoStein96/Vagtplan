@@ -68,10 +68,10 @@ namespace Vagtplan.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Schedule>> GetSchedules()
+        public List<Schedule> GetSchedules()
         {
-
-            return await _scheduleService.GetSchedules();
+            var UserId = HttpContext.Items["FirebaseUserId"] as string;
+            return _scheduleService.GetSchedules(UserId);
         }
 
 

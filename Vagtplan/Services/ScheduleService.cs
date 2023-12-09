@@ -1,6 +1,4 @@
-﻿using Google.Api.Gax;
-using Microsoft.EntityFrameworkCore;
-using Vagtplan.Interfaces;
+﻿using Vagtplan.Interfaces;
 using Vagtplan.Interfaces.Services;
 using Vagtplan.Models;
 using Vagtplan.Models.Dto;
@@ -19,6 +17,7 @@ namespace Vagtplan.Services
             Schedule schedule = new Schedule();
             schedule.StartTime = scheduleDto.StartTime;
             schedule.EndTime = scheduleDto.EndTime;
+            schedule.Organisation = _unitOfWork.Organisations.Find(o => o.Id == scheduleDto.OrgId).First();
             for (DateOnly date = scheduleDto.StartTime; date <= scheduleDto.EndTime; date = date.AddDays(1))
             {
 
@@ -40,9 +39,10 @@ namespace Vagtplan.Services
             return _unitOfWork.Schedules.GetSchedule(id);
         }
 
-        public Task<List<Schedule>> GetSchedules()
+        public List<Schedule> GetSchedules(string firebaseId)
         {
-            return _unitOfWork.Schedules.GetSchedules();
+            var employee = _unitOfWork.Employees.Find(e => e.FirebaseId == firebaseId).First();
+            return _unitOfWork.Schedules.Find(s => s.OrganisationId == employee.OrganisationId).ToList();
         }
 
         public void ExportSchedule(int id)
