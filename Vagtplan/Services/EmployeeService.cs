@@ -18,9 +18,13 @@ namespace Vagtplan.Services
             _unitOfWork = unitOfWork;
         }
 
-        public List<Employee> GetEmployees()
+        public List<Employee> GetEmployees(string firebaseId)
         {
-            return _unitOfWork.Employees.GetEmployees();
+            var employee = _unitOfWork.Employees.Find(e => e.FirebaseId == firebaseId).First();
+
+            var employees = _unitOfWork.Employees.Find(e => e.OrganisationId == employee.OrganisationId).ToList();
+
+            return employees;
         }
 
         public Employee GetEmployee(string employeeId) {

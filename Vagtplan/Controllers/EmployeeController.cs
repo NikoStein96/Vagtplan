@@ -31,7 +31,8 @@ namespace Vagtplan.Controllers
         [HttpGet]
         public  ActionResult<List<Employee>> GetEmployees()
         {
-            var employees =  _employeeService.GetEmployees();
+            var UserId = HttpContext.Items["FirebaseUserId"] as string;
+            var employees =  _employeeService.GetEmployees(UserId);
             return Ok(employees);
         }
 
