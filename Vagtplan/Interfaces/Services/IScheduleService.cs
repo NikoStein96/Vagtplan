@@ -15,5 +15,7 @@ namespace Vagtplan.Interfaces.Services
 
         void ExportSchedule(int id);
 
+        void GenerateShiftsForSchedule(int id);
+
     }
 }

@@ -71,5 +71,60 @@ namespace Vagtplan.Services
                 }
             _unitOfWork.Complete();
         }
+
+        public void GenerateShiftsForSchedule(int id)
+        {
+            var schedule = _unitOfWork.Schedules.GetSchedule(id);
+            var allEmployees = _unitOfWork.Employees.GetEmployees();
+
+            // Track the number of shifts assigned to each employee
+            var employeeShiftCount = new Dictionary<string, int>();
+            foreach (var emp in allEmployees)
+            {
+                employeeShiftCount[emp.FirebaseId] = 0;
+            }
+
+            foreach (var day in schedule.Days)
+            {
+                int shiftsAssigned = 0;
+
+                // Prioritize employees with preferred days and fewer shifts
+                var preferredEmployees = day.AvailableEmployees
+                    .OrderBy(emp => employeeShiftCount[emp.FirebaseId])
+                    .ToList();
+
+                foreach (var employee in preferredEmployees)
+                {
+                    if (shiftsAssigned < day.ShiftsNeeded)
+                    {
+                        day.Shifts.Add(new Shift { Employee = employee, Day = day });
+                        shiftsAssigned++;
+                        employeeShiftCount[employee.FirebaseId]++;
+                    }
+                }
+
+                // Assign remaining shifts to other available employees with fewer shifts
+                if (shiftsAssigned < day.ShiftsNeeded)
+                {
+                    var otherAvailableEmployees = allEmployees
+                        .Except(preferredEmployees)
+                        .OrderBy(emp => employeeShiftCount[emp.FirebaseId])
+                        .ToList();
+
+                    foreach (var employee in otherAvailableEmployees)
+                    {
+                        if (shiftsAssigned < day.ShiftsNeeded)
+                        {
+                            day.Shifts.Add(new Shift { Employee = employee, Day = day });
+                            shiftsAssigned++;
+                            employeeShiftCount[employee.FirebaseId]++;
+                        }
+                    }
+                }
+
+                _unitOfWork.Complete();
+            }
+        
+    }
     }
 }

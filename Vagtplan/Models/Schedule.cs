@@ -35,6 +35,8 @@ namespace Vagtplan.Models
     {
         public int Id { get; set; }
 
+        public int ShiftsNeeded { get; set; } = 0;
+
         // Database-compatible field
         public DateTime DayDateDb { get; set; }
 

@@ -85,19 +85,10 @@ namespace Vagtplan.Controllers
         }
 
         [HttpPut("UpdateShiftDraft")]
-        public async Task<ActionResult<Schedule>> GenerateShiftDraft(int scheduleid)
+        public bool GenerateShiftDraft(int scheduleid)
         {
-            var schedule =  _scheduleService.GetSchedule(scheduleid);
-
-            foreach (Day day in schedule.Days) {
-                foreach (Shift shift in day.Shifts)
-                {
-                    shift.Employee = GetEmployeeWithLeastWorkload(day.AvailableEmployees);
-                    day.AvailableEmployees.Remove(shift.Employee);
-
-                }         
-            }
-            return schedule;
+           _scheduleService.GenerateShiftsForSchedule(scheduleid);
+            return true;
         }
 
         static Employee GetEmployeeWithLeastWorkload(List<Employee> employees)
