@@ -23,7 +23,7 @@ namespace Vagtplan
         {
 
 
-            var credentials = GoogleCredential.FromFile("keys.json");
+            var credentials = GoogleCredential.FromJson(Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS_JSON"));
             var firebaseApp = FirebaseApp.Create(new AppOptions
             {
                 Credential = credentials,
