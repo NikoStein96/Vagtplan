@@ -49,6 +49,7 @@ namespace Vagtplan.Services
             _unitOfWork.Employees.Add(newEmployee);
             _unitOfWork.Complete();
             return true;
+
         }
 
         public bool CreateOwner(CreateOwnerDto employee)
