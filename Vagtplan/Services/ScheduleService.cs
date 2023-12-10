@@ -121,7 +121,6 @@ namespace Vagtplan.Services
 
                 _unitOfWork.Complete();
             }
-        
     }
     }
 }
